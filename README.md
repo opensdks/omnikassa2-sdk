@@ -1,0 +1,1 @@
+# omnikassa2-sdk
