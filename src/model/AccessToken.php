@@ -4,9 +4,6 @@ use DateTime;
 use InvalidArgumentException;
 use JsonSerializable;
 
-/**
- * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model
- */
 class AccessToken implements JsonSerializable
 {
     /** @var string */

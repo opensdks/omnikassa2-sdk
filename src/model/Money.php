@@ -3,9 +3,6 @@
 use JsonSerializable;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SignatureDataProvider;
 
-/**
- * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model
- */
 class Money implements JsonSerializable, SignatureDataProvider
 {
     /** @var string */
@@ -78,10 +75,15 @@ class Money implements JsonSerializable, SignatureDataProvider
         $this->amount = $amount;
     }
 
+    public function getSignatureData()
+    {
+        return array($this->currency, $this->amount);
+    }
+
     /**
      * @return array
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return array("currency" => $this->currency, "amount" => $this->amount);
     }
@@ -89,13 +91,8 @@ class Money implements JsonSerializable, SignatureDataProvider
     /**
      * @return string
      */
-    function __toString()
+    public function __toString()
     {
         return ($this->amount / 100) . ' ' . $this->currency;
-    }
-
-    public function getSignatureData()
-    {
-        return array($this->currency, $this->amount);
     }
 }

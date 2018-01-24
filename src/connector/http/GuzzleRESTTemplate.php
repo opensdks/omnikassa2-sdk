@@ -22,7 +22,7 @@ class GuzzleRESTTemplate implements RESTTemplate
     public function __construct($baseUrl)
     {
         $this->client = new Client([
-            'base_uri' => $this->parse($baseUrl)
+            'base_url' => $this->parse($baseUrl)
         ]);
     }
 

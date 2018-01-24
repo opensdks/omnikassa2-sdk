@@ -1,18 +1,22 @@
 <?php namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\endpoint\Endpoint;
+
 /**
- * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response
+ * With an instance of this class you can retrieve the order statuses at the Rabobank OmniKassa.
+ *
+ * @see Endpoint::retrieveAnnouncement() To retrieve the order statuses.
  */
 class AnnouncementResponse extends Response
 {
     /** @var int */
-    protected $poiId;
+    private $poiId;
     /** @var string */
-    protected $authentication;
+    private $authentication;
     /** @var string */
-    protected $expiry;
+    private $expiry;
     /** @var string */
-    protected $eventName;
+    private $eventName;
 
     /**
      * @return int

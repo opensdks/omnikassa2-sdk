@@ -7,6 +7,7 @@
 class PaymentBrand
 {
     const IDEAL = 'IDEAL';
+    const AFTERPAY = 'AFTERPAY';
     const PAYPAL = 'PAYPAL';
     const MASTERCARD = 'MASTERCARD';
     const VISA = 'VISA';

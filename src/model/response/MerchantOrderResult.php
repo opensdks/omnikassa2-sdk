@@ -4,26 +4,26 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SignatureDataProvider;
 
 /**
- * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response
+ * This object contains information, like status and paid amount, of an order.
  */
 class MerchantOrderResult implements SignatureDataProvider
 {
     /** @var int */
-    protected $poiId;
+    private $poiId;
     /** @var string */
-    protected $merchantOrderId;
+    private $merchantOrderId;
     /** @var string */
-    protected $omnikassaOrderId;
+    private $omnikassaOrderId;
     /** @var string */
-    protected $orderStatus;
+    private $orderStatus;
     /** @var string */
-    protected $orderStatusDateTime;
+    private $orderStatusDateTime;
     /** @var string */
-    protected $errorCode;
+    private $errorCode;
     /** @var Money */
-    protected $paidAmount;
+    private $paidAmount;
     /** @var Money */
-    protected $totalAmount;
+    private $totalAmount;
 
     /**
      * @return int

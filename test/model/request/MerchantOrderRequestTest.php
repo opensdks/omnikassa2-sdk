@@ -1,7 +1,9 @@
 <?php namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request;
 
 use DateTime;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\ProductType;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\VatCategory;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\request\MerchantOrderRequestBuilder;
 use PHPUnit_Framework_TestCase;
 
@@ -35,15 +37,17 @@ class MerchantOrderRequestTest extends PHPUnit_Framework_TestCase
             'merchantOrderId' => '100',
             'description' => 'Order ID: 100',
             'orderItems' => array(
-                array('name' => 'Test product', 'description' => 'Description', 'quantity' => 1, 'amount' => array('currency' => 'EUR', 'amount' => 9999), 'tax' => array('currency' => 'EUR', 'amount' => 499), 'category' => 'PHYSICAL')
+                array('id' => '15', 'name' => 'Name', 'description' => 'Description', 'quantity' => 1, 'amount' => array('currency' => 'EUR', 'amount' => 100), 'tax' => array('currency' => 'EUR', 'amount' => 50), 'category' => ProductType::DIGITAL, 'vatCategory' => VatCategory::LOW)
             ),
             'amount' => array('currency' => 'EUR', 'amount' => 9999),
-            'shippingDetail' => array('firstName' => 'Developer', 'middleName' => 'van', 'lastName' => 'Ximedes', 'street' => 'Lichtfabriekplein 1', 'postalCode' => '2031TE', 'city' => 'Haarlem', 'countryCode' => 'NL'),
+            'shippingDetail' => array('firstName' => 'Developer', 'middleName' => 'van', 'lastName' => 'Ximedes', 'street' => 'Lichtfabriekplein', 'houseNumber' => '1', 'houseNumberAddition' => 'a', 'postalCode' => '2031TE', 'city' => 'Haarlem', 'countryCode' => 'NL'),
+            'billingDetail' => array('firstName' => 'Developer', 'middleName' => 'van', 'lastName' => 'Ximedes', 'street' => 'Donkerfabriekplein', 'houseNumber' => '2', 'houseNumberAddition' => 'a', 'postalCode' => '3120ET', 'city' => 'Amsterdam', 'countryCode' => 'NL'),
+            'customerInformation' => array('emailAddress' => 'developer@ximedes.com', 'dateOfBirth' => '05-11-1987', 'gender' => 'F', 'initials' => 'D.X.', 'telephoneNumber' => '0204971111'),
             'language' => 'NL',
             'merchantReturnURL' => 'http://localhost/',
             'paymentBrand' => 'IDEAL',
             'paymentBrandForce' => 'FORCE_ONCE',
-            'signature' => 'b2b4df382b99d046954fe0f4d55a9ccad5fcb9ae0d9a941f9b38d196fcbe42f4989921b3f353e1fc80bfccec84419b348f898fc805338784ee7226f1e779b15f'
+            'signature' => 'f34c801ed45fbe3359d997ddf702d3aeaf027c89725fdadd57db7ef0cdd171789b8d79c78d69771b51b91a890730f92bffb9634e7371e572deaf0a4cc6b2eac0'
         ));
 
         $actualJson = json_encode($merchantOrderRequest);
@@ -60,11 +64,11 @@ class MerchantOrderRequestTest extends PHPUnit_Framework_TestCase
             'timestamp' => '2016-12-21T14:13:56+01:00',
             'merchantOrderId' => '100',
             'orderItems' => array(
-                array('name' => 'Test product', 'description' => 'Description', 'quantity' => 1, 'amount' => array('currency' => 'EUR', 'amount' => 9999), 'category' => 'PHYSICAL')
+                array('name' => 'Name', 'description' => 'Description', 'quantity' => 1, 'amount' => array('currency' => 'EUR', 'amount' => 100), 'category' => ProductType::DIGITAL)
             ),
             'amount' => array('currency' => 'EUR', 'amount' => 9999),
             'merchantReturnURL' => 'http://localhost/',
-            'signature' => '20b8ec4bfb3a2a453aa04daa4942de4b67d2e8b0f36521c3fe9f88aebd1c83d3fce7f88be7148dbc4e68a1708da4cba65bf0df568412505557bad57a2742d45b'
+            'signature' => '765b966304f7e6d4f4c1dd5b684175a7f193eb282c27462d6e1c2c170d7d0db84c0136d06082bf4d62f12bbabb8a54abc64c2106016f041ec1c0ef2e599ac659'
         ));
 
         $actualJson = json_encode($merchantOrderRequest);
@@ -81,9 +85,9 @@ class MerchantOrderRequestTest extends PHPUnit_Framework_TestCase
             'timestamp' => '2016-12-21T14:13:56+01:00',
             'merchantOrderId' => '100',
             'amount' => array('currency' => 'EUR', 'amount' => 9999),
-            'shippingDetail' => array('firstName' => 'Developer', 'lastName' => 'Ximedes', 'street' => 'Lichtfabriekplein 1', 'postalCode' => '2031TE', 'city' => 'Haarlem', 'countryCode' => 'NL'),
+            'shippingDetail' => array('firstName' => 'Developer', 'lastName' => 'Ximedes', 'street' => 'Lichtfabriekplein', 'houseNumber' => '1', 'postalCode' => '2031TE', 'city' => 'Haarlem', 'countryCode' => 'NL'),
             'merchantReturnURL' => 'http://localhost/',
-            'signature' => '0d06362272d8625220302b4dcb0ed4ffed90e9092a2c2c1e36a311cc747a4ac9fbba65f0efe994655ee550e6e633636ec4f54b00c2a5c0cb6f0ef5bc82cb9dca'
+            'signature' => '4580fcb3fce9c3e70994f52b396e575cfb4cf53950811733bdb4964fdb094a17c66880fdc18cfc5b13f4e3128dc699ca36aa2ee263c3b8895da95fa8799f25e7'
         ));
 
         $actualJson = json_encode($merchantOrderRequest);

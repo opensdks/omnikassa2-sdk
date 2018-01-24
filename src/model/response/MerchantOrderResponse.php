@@ -1,12 +1,13 @@
 <?php namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
 /**
- * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response
+ * Once an order is announced, an instance of this object will be returned.
+ * You can use this object to retrieve the redirect URL to which the customer should be redirected.
  */
 class MerchantOrderResponse extends Response
 {
     /** @var string */
-    protected $redirectUrl;
+    private $redirectUrl;
 
     /**
      * @return string

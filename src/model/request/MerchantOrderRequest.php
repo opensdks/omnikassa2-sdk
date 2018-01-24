@@ -7,20 +7,18 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
 
 /**
  * Envelope for the MerchantOrder.
- *
- * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request
  */
 class MerchantOrderRequest extends SignedRequest implements JsonSerializable
 {
-    /**
-     * @var MerchantOrder
-     */
+    /** @var MerchantOrder */
     private $merchantOrder;
-    /**
-     * @var DateTime
-     */
+    /** @var DateTime */
     private $timestamp;
 
+    /**
+     * @param MerchantOrder $merchantOrder
+     * @param SigningKey $signingKey
+     */
     public function __construct(MerchantOrder $merchantOrder, SigningKey $signingKey)
     {
         $this->merchantOrder = $merchantOrder;
@@ -55,6 +53,9 @@ class MerchantOrderRequest extends SignedRequest implements JsonSerializable
         return $json;
     }
 
+    /**
+     * @return string
+     */
     private function getFormattedTimestamp()
     {
         return $this->timestamp->format(DateTime::ATOM);
@@ -64,7 +65,8 @@ class MerchantOrderRequest extends SignedRequest implements JsonSerializable
      * This method should only be called from the tests
      * @param DateTime $timestamp
      */
-    function setTimestamp(DateTime $timestamp) {
+    function setTimestamp(DateTime $timestamp)
+    {
         $this->timestamp = $timestamp;
     }
 }
