@@ -1,5 +1,5 @@
 {
-  "name": "rabobank/omnikassa/sdk",
+  "name": "opensdks/omnikassa2-sdk",
   "description": "Rabobank OmniKassa SDK",
   "license": "proprietary",
   "minimum-stability": "dev",
