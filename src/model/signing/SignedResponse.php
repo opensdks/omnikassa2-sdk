@@ -3,8 +3,6 @@
 
 /**
  * This class is responsible for validating the signatures.
- *
- * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing
  */
 abstract class SignedResponse extends Signable
 {

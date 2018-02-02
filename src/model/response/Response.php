@@ -7,8 +7,6 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
 /**
  * This class is used to easily construct sub classes from json.
  * Classes that extend this class are considered responses from the Rabobank OmniKassa.
- *
- * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response
  */
 abstract class Response extends SignedResponse
 {

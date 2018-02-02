@@ -6,8 +6,6 @@ use RecursiveIteratorIterator;
 
 /**
  * This class is responsible for providing sub classes with signature related functionality like calculating a signature, setting the calculated signature and retrieving the signature related data.
- *
- * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing
  */
 abstract class Signable implements SignatureDataProvider
 {

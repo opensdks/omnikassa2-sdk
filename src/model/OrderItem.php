@@ -3,23 +3,24 @@
 use JsonSerializable;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SignatureDataProvider;
 
-/**
- * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model
- */
 class OrderItem implements JsonSerializable, SignatureDataProvider
 {
     /** @var string */
-    protected $name;
+    private $id;
     /** @var string */
-    protected $description;
+    private $name;
+    /** @var string */
+    private $description;
     /** @var int */
-    protected $quantity;
+    private $quantity;
     /** @var Money */
-    protected $amount;
+    private $amount;
     /** @var Money */
-    protected $tax;
+    private $tax;
     /** @var string */
-    protected $category;
+    private $category;
+    /** @var string */
+    private $vatCategory;
 
     /**
      * @param string $name
@@ -28,8 +29,10 @@ class OrderItem implements JsonSerializable, SignatureDataProvider
      * @param Money $amount describes the price per item
      * @param Money $tax describes the tax per item
      * @param string $category
+     * @deprecated
+     * @see OrderItem::createFrom() to create instances of order items.
      */
-    public function __construct($name, $description, $quantity, Money $amount, $tax, $category)
+    public function __construct($name, $description, $quantity, $amount, $tax, $category)
     {
         $this->name = $name;
         $this->description = $description;
@@ -37,6 +40,55 @@ class OrderItem implements JsonSerializable, SignatureDataProvider
         $this->amount = $amount;
         $this->tax = $tax;
         $this->category = $category;
+    }
+
+    /**
+     * Create an {@link OrderItem} from the given data array.
+     *
+     * Example:
+     * <code>
+     * $orderItem = OrderItem::createFrom([
+     *     "id" => "15",
+     *     "name" => "Name",
+     *     "description" => "Description",
+     *     "quantity" => 1,
+     *     "amount" => Money::fromCents('EUR', 100),
+     *     "tax" => Money::fromCents('EUR', 50),
+     *     "category" => ProductType::DIGITAL,
+     *     "vatCategory" => VatCategory::LOW
+     * ]);
+     * </code>
+     *
+     * Example without optional fields:
+     * <code>
+     * OrderItem::createFrom([
+     *     "name" => "Name",
+     *     "description" => "Description",
+     *     "quantity" => 1,
+     *     "amount" => Money::fromCents('EUR', 100),
+     *     "category" => ProductType::DIGITAL
+     * ]);
+     * </code>
+     * @param array $data
+     * @return OrderItem
+     */
+    public static function createFrom(array $data)
+    {
+        $orderItem = new OrderItem(null, null, null, null, null, null);
+        foreach ($orderItem as $key => $value) {
+            if (array_key_exists($key, $data)) {
+                $orderItem->$key = $data["$key"];
+            }
+        }
+        return $orderItem;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -88,10 +140,18 @@ class OrderItem implements JsonSerializable, SignatureDataProvider
     }
 
     /**
+     * @return string
+     */
+    public function getVatCategory()
+    {
+        return $this->vatCategory;
+    }
+
+    /**
      * @return mixed data which can be serialized by <b>json_encode</b>,
      * which is a value of any type other than a resource.
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         $json = array();
         foreach ($this as $key => $value) {
@@ -104,13 +164,19 @@ class OrderItem implements JsonSerializable, SignatureDataProvider
 
     public function getSignatureData()
     {
-        return array(
-            $this->name,
-            $this->description,
-            $this->quantity,
-            $this->amount->getSignatureData(),
-            ($this->tax != null ? $this->tax->getSignatureData() : null),
-            $this->category
-        );
+        $data = [];
+        if ($this->id != null) {
+            $data[] = $this->id;
+        }
+        $data[] = $this->name;
+        $data[] = $this->description;
+        $data[] = $this->quantity;
+        $data[] = $this->amount->getSignatureData();
+        $data[] = ($this->tax != null ? $this->tax->getSignatureData() : null);
+        $data[] = $this->category;
+        if ($this->vatCategory != null) {
+            $data[] = $this->vatCategory;
+        }
+        return $data;
     }
 }

@@ -2,8 +2,6 @@
 
 /**
  * This class is responsible for calculating and setting the signature for the request it represents.
- *
- * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing
  */
 abstract class SignedRequest extends Signable
 {

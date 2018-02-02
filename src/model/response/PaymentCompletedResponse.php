@@ -4,9 +4,6 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\InvalidSignatu
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SignedResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
 
-/**
- * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response
- */
 class PaymentCompletedResponse extends SignedResponse
 {
     /** @var string */

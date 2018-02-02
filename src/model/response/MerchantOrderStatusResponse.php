@@ -1,7 +1,8 @@
 <?php namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
 /**
- * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response
+ * This response contains partial or all order results.
+ * By using the $moreOrderResultsAvailable boolean you can check if more order results can be retrieved.
  */
 class MerchantOrderStatusResponse extends Response
 {
