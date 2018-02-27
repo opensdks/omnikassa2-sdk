@@ -30,4 +30,13 @@ class PaymentCompletedResponseTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('1', $paymentCompletedResponse->getOrderID());
         $this->assertEquals('IN_PROGRESS', $paymentCompletedResponse->getStatus());
     }
+
+    public function testIsValidReturnsTrueForNonIntegerIds()
+    {
+        $signingKey = new SigningKey('secret');
+        $paymentCompletedResponse = PaymentCompletedResponse::createInstance('866a13038dd88f851fa3556a3b7d2da515018a95', 'COMPLETED', 'f29bc3142089ba67f3ff62a9b4b94fd2c923f50adbd752430ae480f70727863de750aa05d2dbae1bd0adb0c380135cbac34062b121cb051fbf9193a6a1c016fe', $signingKey);
+        $this->assertNotFalse($paymentCompletedResponse);
+        $this->assertEquals('866a13038dd88f851fa3556a3b7d2da515018a95', $paymentCompletedResponse->getOrderID());
+        $this->assertEquals('COMPLETED', $paymentCompletedResponse->getStatus());
+    }
 }

@@ -52,7 +52,6 @@ class PaymentCompletedResponse extends SignedResponse
     public static function createInstance($orderID, $status, $signature, SigningKey $signingKey)
     {
         //Sanitize input
-        $orderID = preg_replace('/[^0-9]/', '', $orderID);
         $status = preg_replace('/[^A-Z_]/', '', $status);
         $signature = preg_replace('/[^0-9a-f]/', '', $signature);
 
