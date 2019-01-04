@@ -3,6 +3,10 @@
 use JsonSerializable;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SignatureDataProvider;
 
+/**
+ * Class OrderItem
+ * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model
+ */
 class OrderItem implements JsonSerializable, SignatureDataProvider
 {
     /** @var string */
@@ -29,8 +33,11 @@ class OrderItem implements JsonSerializable, SignatureDataProvider
      * @param Money $amount describes the price per item
      * @param Money $tax describes the tax per item
      * @param string $category
-     * @deprecated
-     * @see OrderItem::createFrom() to create instances of order items.
+     *
+     * @deprecated This constructor is deprecated but remains available for backwards compatibility. Use the static
+     * createFrom method instead.
+     *
+     * @see OrderItem::createFrom()
      */
     public function __construct($name, $description, $quantity, $amount, $tax, $category)
     {
@@ -42,42 +49,15 @@ class OrderItem implements JsonSerializable, SignatureDataProvider
         $this->category = $category;
     }
 
-    /**
-     * Create an {@link OrderItem} from the given data array.
-     *
-     * Example:
-     * <code>
-     * $orderItem = OrderItem::createFrom([
-     *     "id" => "15",
-     *     "name" => "Name",
-     *     "description" => "Description",
-     *     "quantity" => 1,
-     *     "amount" => Money::fromCents('EUR', 100),
-     *     "tax" => Money::fromCents('EUR', 50),
-     *     "category" => ProductType::DIGITAL,
-     *     "vatCategory" => VatCategory::LOW
-     * ]);
-     * </code>
-     *
-     * Example without optional fields:
-     * <code>
-     * OrderItem::createFrom([
-     *     "name" => "Name",
-     *     "description" => "Description",
-     *     "quantity" => 1,
-     *     "amount" => Money::fromCents('EUR', 100),
-     *     "category" => ProductType::DIGITAL
-     * ]);
-     * </code>
-     * @param array $data
-     * @return OrderItem
-     */
     public static function createFrom(array $data)
     {
         $orderItem = new OrderItem(null, null, null, null, null, null);
-        foreach ($orderItem as $key => $value) {
-            if (array_key_exists($key, $data)) {
+        foreach ($data as $key => $value) {
+            if (property_exists($orderItem, $key)) {
                 $orderItem->$key = $data["$key"];
+            } else {
+                $properties = implode(", ", array_keys(get_object_vars($orderItem)));
+                throw new \InvalidArgumentException("Invalid property {$key} supplied. Valid properties for OrderItem are: {$properties}");
             }
         }
         return $orderItem;

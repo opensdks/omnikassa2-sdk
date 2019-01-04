@@ -6,10 +6,9 @@ class MoneyTest extends \PHPUnit_Framework_TestCase
 
     public function testFromCents()
     {
-        $money = Money::fromCents('EUR', 100);
-
-        $this->assertEquals('EUR', $money->getCurrency());
-        $this->assertEquals(100, $money->getAmount());
+        $this->assertAmountFromCents(100);
+        $this->assertAmountFromCents(100.00);
+        $this->assertAmountFromCents(100.00001);
     }
 
     public function testFromDecimal()
@@ -57,5 +56,13 @@ class MoneyTest extends \PHPUnit_Framework_TestCase
         $actualJson = $money->jsonSerialize();
 
         $this->assertEquals($expectedJson, $actualJson);
+    }
+
+    private function assertAmountFromCents($amount)
+    {
+        $money = Money::fromCents('EUR', $amount);
+
+        $this->assertEquals('EUR', $money->getCurrency());
+        $this->assertEquals(intval($amount), $money->getAmount());
     }
 }

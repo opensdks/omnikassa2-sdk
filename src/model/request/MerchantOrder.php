@@ -7,6 +7,10 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\OrderItem;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SignatureDataProvider;
 
+/**
+ * Class MerchantOrder
+ * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request
+ */
 class MerchantOrder implements SignatureDataProvider, JsonSerializable
 {
     /** @var string */
@@ -44,11 +48,16 @@ class MerchantOrder implements SignatureDataProvider, JsonSerializable
      * @param string $paymentBrandForce
      * @param CustomerInformation $customerInformation
      * @param Address $billingDetails
+     *
+     * @deprecated This constructor is deprecated but remains available for backwards compatibility. Use the static
+     * createFrom method instead.
+     *
+     * @see MerchantOrder::createFrom()
      */
     public function __construct($merchantOrderId,
                                 $description,
                                 $orderItems,
-                                Money $amount,
+                                $amount,
                                 $shippingDetails,
                                 $language,
                                 $merchantReturnURL,
@@ -68,6 +77,20 @@ class MerchantOrder implements SignatureDataProvider, JsonSerializable
         $this->merchantReturnURL = $merchantReturnURL;
         $this->paymentBrand = $paymentBrand;
         $this->paymentBrandForce = $paymentBrandForce;
+    }
+
+    public static function createFrom(array $data)
+    {
+        $merchantOrder = new MerchantOrder(null, null, null, null, null, null, null);
+        foreach ($data as $key => $value) {
+            if (property_exists($merchantOrder, $key)) {
+                $merchantOrder->$key = $data["$key"];
+            } else {
+                $properties = implode(", ", array_keys(get_object_vars($merchantOrder)));
+                throw new \InvalidArgumentException("Invalid property {$key} supplied. Valid properties for MerchantOrder are: {$properties}");
+            }
+        }
+        return $merchantOrder;
     }
 
     /**

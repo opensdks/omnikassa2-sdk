@@ -4,7 +4,8 @@ use JsonSerializable;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SignatureDataProvider;
 
 /**
- * This class defines an address.
+ * Class Address
+ * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model
  */
 class Address implements JsonSerializable, SignatureDataProvider
 {
@@ -37,6 +38,11 @@ class Address implements JsonSerializable, SignatureDataProvider
      * @param string $countryCode
      * @param string $houseNumber
      * @param string $houseNumberAddition
+     *
+     * @deprecated This constructor is deprecated but remains available for backwards compatibility. Use the static
+     * createFrom method instead.
+     *
+     * @see Address::createFrom()
      */
     public function __construct($firstName, $middleName, $lastName, $street, $postalCode, $city, $countryCode, $houseNumber = null, $houseNumberAddition = null)
     {
@@ -49,6 +55,20 @@ class Address implements JsonSerializable, SignatureDataProvider
         $this->countryCode = $countryCode;
         $this->houseNumber = $houseNumber;
         $this->houseNumberAddition = $houseNumberAddition;
+    }
+
+    public static function createFrom(array $data)
+    {
+        $address = new Address(null, null, null, null, null, null, null);
+        foreach ($data as $key => $value) {
+            if (property_exists($address, $key)) {
+                $address->$key = $data["$key"];
+            } else {
+                $properties = implode(", ", array_keys(get_object_vars($address)));
+                throw new \InvalidArgumentException("Invalid property {$key} supplied. Valid properties for Address are: {$properties}");
+            }
+        }
+        return $address;
     }
 
     /**

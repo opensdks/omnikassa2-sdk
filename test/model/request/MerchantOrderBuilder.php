@@ -12,70 +12,102 @@ class MerchantOrderBuilder
 {
     public static function makeMinimalOrder()
     {
-        $merchantOrderId = '100';
-        $description = null;
-        $orderItems = null;
-        $shippingDetails = null;
-        $amount = Money::fromDecimal('EUR', 99.99);
-        $language = null;
-        $merchantReturnUrl = 'http://localhost/';
-
-        return new MerchantOrder($merchantOrderId, $description, $orderItems, $amount, $shippingDetails, $language, $merchantReturnUrl);
+        return MerchantOrder::createFrom([
+            'merchantOrderId' => '100',
+            'amount' => Money::fromDecimal('EUR', 99.99),
+            'merchantReturnURL' => 'http://localhost/'
+        ]);
     }
 
     public static function makeWithOrderItemsWithoutOptionalFields()
     {
-        $merchantOrderId = '100';
-        $description = null;
-        $orderItems = array(OrderItemBuilder::makeOrderItemWithoutOptionals());
-        $shippingDetails = null;
-        $amount = Money::fromDecimal('EUR', 99.99);
-        $language = null;
-        $merchantReturnUrl = 'http://localhost/';
-
-        return new MerchantOrder($merchantOrderId, $description, $orderItems, $amount, $shippingDetails, $language, $merchantReturnUrl);
+        return MerchantOrder::createFrom([
+            'merchantOrderId' => '100',
+            'orderItems' => array(OrderItemBuilder::makeOrderItemWithoutOptionals()),
+            'amount' => Money::fromDecimal('EUR', 99.99),
+            'merchantReturnURL' => 'http://localhost/'
+        ]);
     }
 
     public static function makeWithShippingDetailsWithoutOptionalFields()
     {
-        $merchantOrderId = '100';
-        $description = null;
-        $orderItems = null;
-        $shippingDetails = new Address('Developer', null, 'Ximedes', 'Lichtfabriekplein', '2031TE', 'Haarlem', 'NL', '1');
-        $amount = Money::fromDecimal('EUR', 99.99);
-        $language = null;
-        $merchantReturnUrl = 'http://localhost/';
+        $shippingDetail = Address::createFrom([
+            'firstName' => 'Jan',
+            'middleName' => 'van',
+            'lastName' => 'Veen',
+            'street' => 'Voorbeeldstraat',
+            'postalCode' => '1234AB',
+            'city' => 'Haarlem',
+            'countryCode' => 'NL',
+            'houseNumber' => '5',
+            'houseNumberAddition' => 'a'
+        ]);
 
-        return new MerchantOrder($merchantOrderId, $description, $orderItems, $amount, $shippingDetails, $language, $merchantReturnUrl);
+        return MerchantOrder::createFrom([
+            'merchantOrderId' => '100',
+            'shippingDetail' => $shippingDetail,
+            'amount' => Money::fromDecimal('EUR', 99.99),
+            'merchantReturnURL' => 'http://localhost/'
+        ]);
     }
 
     public static function makeWithPaymentBrandRestrictionButWithoutOtherOptionalFields($paymentBrand, $paymentBrandForce)
     {
-        $merchantOrderId = '100';
-        $description = null;
-        $orderItems = null;
-        $shippingDetails = null;
-        $amount = Money::fromDecimal('EUR', 99.99);
-        $language = null;
-        $merchantReturnUrl = 'http://localhost/';
-
-        return new MerchantOrder($merchantOrderId, $description, $orderItems, $amount, $shippingDetails, $language, $merchantReturnUrl, $paymentBrand, $paymentBrandForce);
+        return MerchantOrder::createFrom([
+            'merchantOrderId' => '100',
+            'amount' => Money::fromDecimal('EUR', 99.99),
+            'merchantReturnURL' => 'http://localhost/',
+            'paymentBrand' => $paymentBrand,
+            'paymentBrandForce' => $paymentBrandForce
+        ]);
     }
 
     public static function makeCompleteOrder()
     {
-        $merchantOrderId = '100';
-        $description = 'Order ID: ' . $merchantOrderId;
-        $orderItems = array(OrderItemBuilder::makeCompleteOrderItem());
-        $amount = Money::fromDecimal('EUR', 99.99);
-        $shippingDetails = new Address('Developer', 'van', 'Ximedes', 'Lichtfabriekplein', '2031TE', 'Haarlem', 'NL', '1', 'a');
-        $billingDetails = new Address('Developer', 'van', 'Ximedes', 'Donkerfabriekplein', '3120ET', 'Amsterdam', 'NL', '2', 'a');
-        $customerInformation = new CustomerInformation('developer@ximedes.com', '05-11-1987', 'F', 'D.X.', '0204971111');
-        $language = 'NL';
-        $merchantReturnUrl = 'http://localhost/';
-        $paymentBrand = PaymentBrand::IDEAL;
-        $paymentBrandForce = PaymentBrandForce::FORCE_ONCE;
+        $shippingDetail = Address::createFrom([
+            'firstName' => 'Jan',
+            'middleName' => 'van',
+            'lastName' => 'Veen',
+            'street' => 'Voorbeeldstraat',
+            'postalCode' => '1234AB',
+            'city' => 'Haarlem',
+            'countryCode' => 'NL',
+            'houseNumber' => '5',
+            'houseNumberAddition' => 'a'
+        ]);
 
-        return new MerchantOrder($merchantOrderId, $description, $orderItems, $amount, $shippingDetails, $language, $merchantReturnUrl, $paymentBrand, $paymentBrandForce, $customerInformation, $billingDetails);
+        $billingDetail = Address::createFrom([
+            'firstName' => 'Piet',
+            'middleName' => 'van der',
+            'lastName' => 'Stoel',
+            'street' => 'Dorpsstraat',
+            'postalCode' => '4321YZ',
+            'city' => 'Bennebroek',
+            'countryCode' => 'NL',
+            'houseNumber' => '9',
+            'houseNumberAddition' => 'rood'
+        ]);
+
+        $customerInformation = CustomerInformation::createFrom([
+            'emailAddress' => 'jan.van.veen@gmail.com',
+            'dateOfBirth' => '20-03-1987',
+            'gender' => 'M',
+            'initials' => 'J.M.',
+            'telephoneNumber' => '0204971111'
+        ]);
+
+        return MerchantOrder::createFrom([
+            'merchantOrderId' => '100',
+            'description' => 'Order ID: ' . '100',
+            'orderItems' => array(OrderItemBuilder::makeCompleteOrderItem()),
+            'amount' => Money::fromDecimal('EUR', 99.99),
+            'shippingDetail' => $shippingDetail,
+            'billingDetail' => $billingDetail,
+            'customerInformation' => $customerInformation,
+            'language' => 'NL',
+            'merchantReturnURL' => 'http://localhost/',
+            'paymentBrand' => PaymentBrand::IDEAL,
+            'paymentBrandForce' => PaymentBrandForce::FORCE_ONCE
+        ]);
     }
 }

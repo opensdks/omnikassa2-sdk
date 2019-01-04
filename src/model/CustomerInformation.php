@@ -4,7 +4,8 @@ use JsonSerializable;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SignatureDataProvider;
 
 /**
- * This class defines the customer information.
+ * Class CustomerInformation
+ * @package nl\rabobank\gict\payments_savings\omnikassa_sdk\model
  */
 class CustomerInformation implements JsonSerializable, SignatureDataProvider
 {
@@ -25,6 +26,11 @@ class CustomerInformation implements JsonSerializable, SignatureDataProvider
      * @param string $gender
      * @param string $initials
      * @param string $telephoneNumber
+     *
+     * @deprecated This constructor is deprecated but remains available for backwards compatibility. Use the static
+     * createFrom method instead.
+     *
+     * @see CustomerInformation::createFrom()
      */
     public function __construct($emailAddress, $dateOfBirth, $gender, $initials, $telephoneNumber)
     {
@@ -33,6 +39,20 @@ class CustomerInformation implements JsonSerializable, SignatureDataProvider
         $this->gender = $gender;
         $this->initials = $initials;
         $this->telephoneNumber = $telephoneNumber;
+    }
+
+    public static function createFrom(array $data)
+    {
+        $customerInformation = new CustomerInformation(null, null, null, null, null);
+        foreach ($data as $key => $value) {
+            if (property_exists($customerInformation, $key)) {
+                $customerInformation->$key = $data["$key"];
+            } else {
+                $properties = implode(", ", array_keys(get_object_vars($customerInformation)));
+                throw new \InvalidArgumentException("Invalid property {$key} supplied. Valid properties for CustomerInformation are: {$properties}");
+            }
+        }
+        return $customerInformation;
     }
 
     /**

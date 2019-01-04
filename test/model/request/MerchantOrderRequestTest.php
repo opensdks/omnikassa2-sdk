@@ -27,6 +27,12 @@ class MerchantOrderRequestTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedJson, $actualJson);
     }
 
+    public function testExceptionIsThrownForInvalidProperty() {
+        $this->setExpectedException('InvalidArgumentException');
+
+        MerchantOrder::createFrom(['merchanOrderId' => 'test']);
+    }
+
     public function testJsonEncoding_allFields()
     {
         $merchantOrderRequest = MerchantOrderRequestBuilder::makeCompleteRequest();
@@ -40,14 +46,14 @@ class MerchantOrderRequestTest extends PHPUnit_Framework_TestCase
                 array('id' => '15', 'name' => 'Name', 'description' => 'Description', 'quantity' => 1, 'amount' => array('currency' => 'EUR', 'amount' => 100), 'tax' => array('currency' => 'EUR', 'amount' => 50), 'category' => ProductType::DIGITAL, 'vatCategory' => VatCategory::LOW)
             ),
             'amount' => array('currency' => 'EUR', 'amount' => 9999),
-            'shippingDetail' => array('firstName' => 'Developer', 'middleName' => 'van', 'lastName' => 'Ximedes', 'street' => 'Lichtfabriekplein', 'houseNumber' => '1', 'houseNumberAddition' => 'a', 'postalCode' => '2031TE', 'city' => 'Haarlem', 'countryCode' => 'NL'),
-            'billingDetail' => array('firstName' => 'Developer', 'middleName' => 'van', 'lastName' => 'Ximedes', 'street' => 'Donkerfabriekplein', 'houseNumber' => '2', 'houseNumberAddition' => 'a', 'postalCode' => '3120ET', 'city' => 'Amsterdam', 'countryCode' => 'NL'),
-            'customerInformation' => array('emailAddress' => 'developer@ximedes.com', 'dateOfBirth' => '05-11-1987', 'gender' => 'F', 'initials' => 'D.X.', 'telephoneNumber' => '0204971111'),
+            'shippingDetail' => array('firstName' => 'Jan', 'middleName' => 'van', 'lastName' => 'Veen', 'street' => 'Voorbeeldstraat', 'houseNumber' => '5', 'houseNumberAddition' => 'a', 'postalCode' => '1234AB', 'city' => 'Haarlem', 'countryCode' => 'NL'),
+            'billingDetail' => array('firstName' => 'Piet', 'middleName' => 'van der', 'lastName' => 'Stoel', 'street' => 'Dorpsstraat', 'houseNumber' => '9', 'houseNumberAddition' => 'rood', 'postalCode' => '4321YZ', 'city' => 'Bennebroek', 'countryCode' => 'NL'),
+            'customerInformation' => array('emailAddress' => 'jan.van.veen@gmail.com', 'dateOfBirth' => '20-03-1987', 'gender' => 'M', 'initials' => 'J.M.', 'telephoneNumber' => '0204971111'),
             'language' => 'NL',
             'merchantReturnURL' => 'http://localhost/',
             'paymentBrand' => 'IDEAL',
             'paymentBrandForce' => 'FORCE_ONCE',
-            'signature' => 'f34c801ed45fbe3359d997ddf702d3aeaf027c89725fdadd57db7ef0cdd171789b8d79c78d69771b51b91a890730f92bffb9634e7371e572deaf0a4cc6b2eac0'
+            'signature' => '0712c403c89ae92f7531aea31280eb517e274c93c2196e905415407c0dc4bd71e7f0048720ae70d00303da8551485c6444c0f5ddf215ebeb7af4e34580a1af61'
         ));
 
         $actualJson = json_encode($merchantOrderRequest);
@@ -85,9 +91,9 @@ class MerchantOrderRequestTest extends PHPUnit_Framework_TestCase
             'timestamp' => '2016-12-21T14:13:56+01:00',
             'merchantOrderId' => '100',
             'amount' => array('currency' => 'EUR', 'amount' => 9999),
-            'shippingDetail' => array('firstName' => 'Developer', 'lastName' => 'Ximedes', 'street' => 'Lichtfabriekplein', 'houseNumber' => '1', 'postalCode' => '2031TE', 'city' => 'Haarlem', 'countryCode' => 'NL'),
+            'shippingDetail' => array('firstName' => 'Jan', 'middleName' => 'van', 'lastName' => 'Veen', 'street' => 'Voorbeeldstraat', 'houseNumber' => '5', 'houseNumberAddition' => 'a', 'postalCode' => '1234AB', 'city' => 'Haarlem', 'countryCode' => 'NL'),
             'merchantReturnURL' => 'http://localhost/',
-            'signature' => '4580fcb3fce9c3e70994f52b396e575cfb4cf53950811733bdb4964fdb094a17c66880fdc18cfc5b13f4e3128dc699ca36aa2ee263c3b8895da95fa8799f25e7'
+            'signature' => '7a20d5896b7a379168da08bbce2fd9d02dde7fdc7c9963728c6f83d79d36477c797df89e14544210f746c666d14587f9724fe09df6cd8ff228d1d2c8e2480e8f'
         ));
 
         $actualJson = json_encode($merchantOrderRequest);

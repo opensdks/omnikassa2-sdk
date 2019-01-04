@@ -75,7 +75,8 @@ class GuzzleRESTTemplate implements RESTTemplate
     {
         $response = $this->client->post($path, [
             'headers' => $this->makeRequestHeaders(),
-            'json' => $body
+            'json' => $body,
+            'expect' => false
         ]);
         return $response->getBody()->getContents();
     }

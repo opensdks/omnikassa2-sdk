@@ -1,5 +1,6 @@
 <?php namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
 
+use InvalidArgumentException;
 use JsonSerializable;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SignatureDataProvider;
 
@@ -14,14 +15,14 @@ class Money implements JsonSerializable, SignatureDataProvider
      * Construct a Money object with the given currency and the amount in cents.
      *
      * @param string $currency
-     * @param int $amount in cents.
+     * @param $amount in cents. The amount is accepted in int and float. The value will be converted to int.
      * @return Money
      */
     public static function fromCents($currency, $amount)
     {
         $money = new Money();
         $money->setCurrency($currency);
-        $money->setAmount($amount);
+        $money->setAmount(intval($amount));
         return $money;
     }
 
@@ -35,12 +36,7 @@ class Money implements JsonSerializable, SignatureDataProvider
     public static function fromDecimal($currency, $amount)
     {
         $roundedAmount = round($amount, 2);
-
-        $money = new Money();
-        $money->setCurrency($currency);
-        $money->setAmount($roundedAmount * 100);
-
-        return $money;
+        return self::fromCents($currency, $roundedAmount * 100);
     }
 
     /**

@@ -19,6 +19,12 @@ class OrderItemTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(VatCategory::LOW, $orderItem->getVatCategory());
     }
 
+    public function testExceptionIsThrownForInvalidProperty() {
+        $this->setExpectedException('InvalidArgumentException');
+
+        OrderItem::createFrom(['ID' => 'test']);
+    }
+
     public function testSignature()
     {
         $expectedSignature = [
