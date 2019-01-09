@@ -9,21 +9,6 @@ This is a fork of the official Rabobank Omnikassa v2 SDK which was packaged as `
 ## Usage
 
 - `composer require opensdks/omnikassa2-sdk`
-- update the composer.json file with the location of this fork
-```json
-{
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/fruitl00p/omnikassa2-sdk"
-    }
-  ],
-  "require": {
-    "opensdks/omnikassa2-sdk":"dev-master"
-  }
-}
-```
-- `composer update`
 - use the library (luke) (as documented in the PDF)
 ```php
 <?php
