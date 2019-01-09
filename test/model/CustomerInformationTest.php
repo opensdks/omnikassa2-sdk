@@ -5,25 +5,31 @@ use PHPUnit_Framework_TestCase;
 
 class CustomerInformationTest extends PHPUnit_Framework_TestCase
 {
-    public function testConstructor()
+    public function testConstruction()
     {
         $customerInformation = $this->makeCompleteCustomerInformation();
 
-        $this->assertEquals('emailAddress', $customerInformation->getEmailAddress());
-        $this->assertEquals('dateOfBirth', $customerInformation->getDateOfBirth());
-        $this->assertEquals('gender', $customerInformation->getGender());
-        $this->assertEquals('initials', $customerInformation->getInitials());
-        $this->assertEquals('telephoneNumber', $customerInformation->getTelephoneNumber());
+        $this->assertEquals('jan.van.veen@gmail.com', $customerInformation->getEmailAddress());
+        $this->assertEquals('20-03-1987', $customerInformation->getDateOfBirth());
+        $this->assertEquals('M', $customerInformation->getGender());
+        $this->assertEquals('J.M.', $customerInformation->getInitials());
+        $this->assertEquals('0204971111', $customerInformation->getTelephoneNumber());
+    }
+
+    public function testExceptionIsThrownForInvalidProperty() {
+        $this->setExpectedException('InvalidArgumentException');
+
+        CustomerInformation::createFrom(['emailAdress' => 'test']);
     }
 
     public function testSignatureData()
     {
         $expectedSignatureData = [
-            'emailAddress',
-            'dateOfBirth',
-            'gender',
-            'initials',
-            'telephoneNumber'
+            'jan.van.veen@gmail.com',
+            '20-03-1987',
+            'M',
+            'J.M.',
+            '0204971111'
         ];
         $customerInformation = $this->makeCompleteCustomerInformation();
         $actualSignatureData = $customerInformation->getSignatureData();
@@ -49,11 +55,11 @@ class CustomerInformationTest extends PHPUnit_Framework_TestCase
     public function testJsonSerialize()
     {
         $expectedJson = [
-            "emailAddress" => 'emailAddress',
-            "dateOfBirth" => 'dateOfBirth',
-            "gender" => 'gender',
-            "initials" => 'initials',
-            "telephoneNumber" => 'telephoneNumber'
+            'emailAddress' => 'jan.van.veen@gmail.com',
+            'dateOfBirth' => '20-03-1987',
+            'gender' => 'M',
+            'initials' => 'J.M.',
+            'telephoneNumber' => '0204971111'
         ];
         $customerInformation = $this->makeCompleteCustomerInformation();
         $actualJson = $customerInformation->jsonSerialize();
@@ -75,7 +81,13 @@ class CustomerInformationTest extends PHPUnit_Framework_TestCase
      */
     private function makeCompleteCustomerInformation()
     {
-        return new CustomerInformation('emailAddress', 'dateOfBirth', 'gender', 'initials', 'telephoneNumber');
+        return CustomerInformation::createFrom([
+            'emailAddress' => 'jan.van.veen@gmail.com',
+            'dateOfBirth' => '20-03-1987',
+            'gender' => 'M',
+            'initials' => 'J.M.',
+            'telephoneNumber' => '0204971111'
+        ]);
     }
 
     /**
@@ -83,6 +95,6 @@ class CustomerInformationTest extends PHPUnit_Framework_TestCase
      */
     private function makeCustomerInformationWithoutOptionals()
     {
-        return new CustomerInformation(null, null, null, null, null);
+        return CustomerInformation::createFrom([]);
     }
 }

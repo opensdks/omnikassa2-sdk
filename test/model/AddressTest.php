@@ -5,24 +5,30 @@ use PHPUnit_Framework_TestCase;
 
 class AddressTest extends PHPUnit_Framework_TestCase
 {
-    public function testConstructor()
+    public function testConstruction()
     {
         $address = $this->makeFullAddress();
 
-        $this->assertEquals('firstName', $address->getFirstName());
-        $this->assertEquals('middleName', $address->getMiddleName());
-        $this->assertEquals('lastName', $address->getLastName());
-        $this->assertEquals('street', $address->getStreet());
-        $this->assertEquals('postalCode', $address->getPostalCode());
-        $this->assertEquals('city', $address->getCity());
-        $this->assertEquals('countryCode', $address->getCountryCode());
-        $this->assertEquals('houseNumber', $address->getHouseNumber());
-        $this->assertEquals('houseNumberAddition', $address->getHouseNumberAddition());
+        $this->assertEquals('Jan', $address->getFirstName());
+        $this->assertEquals('van', $address->getMiddleName());
+        $this->assertEquals('Veen', $address->getLastName());
+        $this->assertEquals('Voorbeeldstraat', $address->getStreet());
+        $this->assertEquals('1234AB', $address->getPostalCode());
+        $this->assertEquals('Haarlem', $address->getCity());
+        $this->assertEquals('NL', $address->getCountryCode());
+        $this->assertEquals('5', $address->getHouseNumber());
+        $this->assertEquals('a', $address->getHouseNumberAddition());
+    }
+
+    public function testExceptionIsThrownForInvalidProperty() {
+        $this->setExpectedException('InvalidArgumentException');
+
+        Address::createFrom(['firstname' => 'test']);
     }
 
     public function testSignatureData()
     {
-        $expectedSignatureData = ['firstName', 'middleName', 'lastName', 'street', 'houseNumber', 'houseNumberAddition', 'postalCode', 'city', 'countryCode'];
+        $expectedSignatureData = ['Jan', 'van', 'Veen', 'Voorbeeldstraat', '5', 'a', '1234AB', 'Haarlem', 'NL'];
         $address = $this->makeFullAddress();
         $actualSignatureData = $address->getSignatureData();
 
@@ -31,7 +37,7 @@ class AddressTest extends PHPUnit_Framework_TestCase
 
     public function testSignatureData_withNullValues()
     {
-        $expectedSignatureData = ['firstName', null, 'lastName', 'street', 'postalCode', 'city', 'countryCode'];
+        $expectedSignatureData = ['Jan', null, 'Veen', 'Voorbeeldstraat', '1234AB', 'Haarlem', 'NL'];
         $address = $this->makeSmallAddress();
         $actualSignatureData = $address->getSignatureData();
 
@@ -41,15 +47,15 @@ class AddressTest extends PHPUnit_Framework_TestCase
     public function testJsonSerialize()
     {
         $expectedJson = [
-            "firstName" => 'firstName',
-            "middleName" => 'middleName',
-            "lastName" => 'lastName',
-            "street" => 'street',
-            "houseNumber" => 'houseNumber',
-            "houseNumberAddition" => 'houseNumberAddition',
-            "postalCode" => 'postalCode',
-            "city" => 'city',
-            "countryCode" => 'countryCode'
+            'firstName' => 'Jan',
+            'middleName' => 'van',
+            'lastName' => 'Veen',
+            'street' => 'Voorbeeldstraat',
+            'houseNumber' => '5',
+            'houseNumberAddition' => 'a',
+            'postalCode' => '1234AB',
+            'city' => 'Haarlem',
+            'countryCode' => 'NL'
         ];
         $address = $this->makeFullAddress();
         $actualJson = $address->jsonSerialize();
@@ -60,12 +66,12 @@ class AddressTest extends PHPUnit_Framework_TestCase
     public function testJsonSerialize_withNullValues()
     {
         $expectedJson = [
-            "firstName" => 'firstName',
-            "lastName" => 'lastName',
-            "street" => 'street',
-            "postalCode" => 'postalCode',
-            "city" => 'city',
-            "countryCode" => 'countryCode'
+            'firstName' => 'Jan',
+            'lastName' => 'Veen',
+            'street' => 'Voorbeeldstraat',
+            'postalCode' => '1234AB',
+            'city' => 'Haarlem',
+            'countryCode' => 'NL'
         ];
         $address = $this->makeSmallAddress();
         $actualJson = $address->jsonSerialize();
@@ -78,7 +84,17 @@ class AddressTest extends PHPUnit_Framework_TestCase
      */
     private function makeFullAddress()
     {
-        return new Address('firstName', 'middleName', 'lastName', 'street', 'postalCode', 'city', 'countryCode', 'houseNumber', 'houseNumberAddition');
+        return Address::createFrom([
+           'firstName' => 'Jan',
+           'middleName' => 'van',
+           'lastName' => 'Veen',
+           'street' => 'Voorbeeldstraat',
+           'postalCode' => '1234AB',
+           'city' => 'Haarlem',
+           'countryCode' => 'NL',
+           'houseNumber' => '5',
+           'houseNumberAddition' => 'a'
+        ]);
     }
 
     /**
@@ -86,6 +102,13 @@ class AddressTest extends PHPUnit_Framework_TestCase
      */
     private function makeSmallAddress()
     {
-        return new Address('firstName', null, 'lastName', 'street', 'postalCode', 'city', 'countryCode');
+        return Address::createFrom([
+            'firstName' => 'Jan',
+            'lastName' => 'Veen',
+            'street' => 'Voorbeeldstraat',
+            'postalCode' => '1234AB',
+            'city' => 'Haarlem',
+            'countryCode' => 'NL',
+        ]);
     }
 }

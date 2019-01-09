@@ -35,7 +35,7 @@ class Endpoint
     }
 
     /**
-     * Create an instance of the endpoint to connect to the Raboabank OmniKassa.
+     * Create an instance of the endpoint to connect to the Rabobank OmniKassa.
      *
      * @param string $baseURL The base URL pointing towards the Rabobank OmniKassa environment.
      * @param SigningKey $signingKey The secret key used to sign messages.
