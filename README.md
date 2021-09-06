@@ -3,7 +3,7 @@
 This is a fork of the official Rabobank Omnikassa v2 SDK which was packaged as `opensdks/omnikassa2-sdk`. All that has changed is:
 
 - removal of the english Documentation PDF
-- support Guzzle6
+- support Guzzle6 and Guzzle7
 - support for non-integer OrderIDs (i.e. HEX)
 
 ## Usage
