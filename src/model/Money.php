@@ -35,8 +35,9 @@ class Money implements JsonSerializable, SignatureDataProvider
      */
     public static function fromDecimal($currency, $amount)
     {
-        $roundedAmount = round($amount, 2);
-        return self::fromCents($currency, $roundedAmount * 100);
+        $roundedAmount = round($roundedAmount * 100, 2);
+        
+        return self::fromCents($currency, $roundedAmount);
     }
 
     /**
